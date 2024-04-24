@@ -6,6 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.Instant;
+
+
 @Entity
 @Table(name = "\"user\"")
 @Setter
@@ -39,4 +42,6 @@ public class User {
     @NotNull
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
+
+    Instant now = Instant.now();
 }

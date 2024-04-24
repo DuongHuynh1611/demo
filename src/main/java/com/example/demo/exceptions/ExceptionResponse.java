@@ -2,7 +2,7 @@ package com.example.demo.exceptions;
 
 import java.util.Date;
 
-public class ExceptionReponse {
+public class ExceptionResponse {
     private Date timestamp;
     private String message;
     private String details;

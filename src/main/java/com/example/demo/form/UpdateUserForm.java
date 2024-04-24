@@ -2,8 +2,9 @@ package com.example.demo.form;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
+
+import java.time.Instant;
 
 @Data
 public class UpdateUserForm {
@@ -14,4 +15,6 @@ public class UpdateUserForm {
     private String firstName;
 
     private String lastName;
+
+    Instant now = Instant.now();
 }
