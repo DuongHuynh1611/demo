@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import java.time.Instant;
 
@@ -43,5 +44,7 @@ public class User {
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
+    @CreatedDate
+//    @Column(name = "created_date")
     Instant now = Instant.now();
 }
