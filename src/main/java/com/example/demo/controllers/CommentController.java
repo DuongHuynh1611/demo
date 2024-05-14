@@ -1,6 +1,7 @@
 package com.example.demo.controllers;
 
 import com.example.demo.models.Comment;
+import com.example.demo.models.Tutorial;
 import com.example.demo.repositories.CommentRepository;
 import com.example.demo.repositories.TutorialRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -21,13 +23,25 @@ public class CommentController {
     @Autowired
     private CommentRepository commentRepository;
 
+//    @GetMapping("/tutorials/{tutorialId}/comments")
+//    public ResponseEntity<List<Comment>> getAllCommentsByTutorialId(@PathVariable(value = "tutorialId") Long tutorialId) {
+//        if (!tutorialRepository.existsById(tutorialId)) {
+//            throw new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId);
+//        }
+//
+//        //@ManytoOne
+//        List<Comment> comments = commentRepository.findByTutorialId(tutorialId);
+//        return new ResponseEntity<>(comments, HttpStatus.OK);
+//    }
+
     @GetMapping("/tutorials/{tutorialId}/comments")
     public ResponseEntity<List<Comment>> getAllCommentsByTutorialId(@PathVariable(value = "tutorialId") Long tutorialId) {
-        if (!tutorialRepository.existsById(tutorialId)) {
-            throw new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId);
-        }
+        Tutorial tutorial = tutorialRepository.findById(tutorialId)
+                .orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
 
-        List<Comment> comments = commentRepository.findByTutorialId(tutorialId);
+        List<Comment> comments = new ArrayList<Comment>();
+        comments.addAll(tutorial.getComments());
+
         return new ResponseEntity<>(comments, HttpStatus.OK);
     }
 
@@ -42,17 +56,14 @@ public class CommentController {
     @PostMapping("/tutorials/{tutorialId}/comments")
     public ResponseEntity<Comment> createComment(@PathVariable(value = "tutorialId") Long tutorialId,
                                                  @RequestBody Comment commentRequest) {
-
         Comment comment = tutorialRepository.findById(tutorialId).map(tutorial -> {
-            commentRequest.setTutorial(tutorial);
+            tutorial.getComments().add(commentRequest);
             return commentRepository.save(commentRequest);
         }).orElseThrow(() -> new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId));
 
-        comment.setContent(commentRequest.getContent());
-        comment = commentRepository.save(new Comment(comment.getContent()));
-
         return new ResponseEntity<>(comment, HttpStatus.CREATED);
     }
+
 
     @PutMapping("/comments/{id}")
     public ResponseEntity<Comment> updateComment(@PathVariable("id") long id, @RequestBody Comment commentRequest) {
@@ -68,16 +79,6 @@ public class CommentController {
     public ResponseEntity<HttpStatus> deleteComment(@PathVariable("id") long id) {
         commentRepository.deleteById(id);
 
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @DeleteMapping("/tutorials/{tutorialId}/comments")
-    public ResponseEntity<List<Comment>> deleteAllCommentsOfTutorial(@PathVariable(value = "tutorialId") Long tutorialId) {
-        if (!tutorialRepository.existsById(tutorialId)) {
-            throw new ResourceNotFoundException("Not found Tutorial with id = " + tutorialId );
-        }
-
-        commentRepository.deleteByTutorialId(tutorialId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

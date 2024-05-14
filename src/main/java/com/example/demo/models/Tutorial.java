@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "tutorials")
 @Getter
 @Setter
 public class Tutorial {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "tutorial_generator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Column(name = "title")
@@ -21,6 +24,10 @@ public class Tutorial {
 
     @Column(name = "published")
     private boolean published;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @JoinColumn(name = "tutorial_id")
+    private Set<Comment> comments = new HashSet<>();
 
     public Tutorial(){
 
