@@ -34,6 +34,6 @@ public class Post {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id",nullable = false)
-    @JsonIgnoreProperties(value = {"posts"})
+    @JsonIgnoreProperties(value = {"posts","hibernateLazyInitializer"})
     private PostCategory postCategory;
 }

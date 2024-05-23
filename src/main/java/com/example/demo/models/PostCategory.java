@@ -31,7 +31,7 @@ public class PostCategory {
     private Instant createdDate;
 
     @OneToMany(fetch = FetchType.LAZY,cascade = CascadeType.ALL,mappedBy = "postCategory")
-    @JsonIgnoreProperties(value = {"postCategory"})
+    @JsonIgnoreProperties(value = {"postCategory","hibernateLazyInitializer"})
     private List<Post> posts;
 
 }
