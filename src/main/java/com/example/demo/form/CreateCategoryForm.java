@@ -7,12 +7,8 @@ import java.time.Instant;
 
 @Data
 public class CreateCategoryForm {
-    private Integer id;
 
     @NotBlank
-    private String firstName;
+    private String name;
 
-    private String lastName;
-
-    Instant createdDate = Instant.now();
 }

@@ -2,6 +2,7 @@ package com.example.demo.services;
 
 import com.example.demo.models.User;
 import com.example.demo.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +24,8 @@ public class UserService {
 
 
     public User findById(Integer id) {
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(
+                ()->new EntityNotFoundException("User not found with Id: "+id));
     }
 
     public User deleteById(int id) {

@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.form.CreateUserForm;
 import com.example.demo.form.UpdateUserForm;
 import com.example.demo.models.User;

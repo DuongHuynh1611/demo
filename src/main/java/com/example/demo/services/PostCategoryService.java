@@ -4,6 +4,7 @@ import com.example.demo.models.PostCategory;
 import com.example.demo.models.User;
 import com.example.demo.repositories.PostCategoryRepository;
 import com.example.demo.repositories.UserRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,8 @@ public class PostCategoryService {
 
 
     public PostCategory findById(Integer id) {
-        return postCategoryRepository.findById(id).orElse(null);
+        return postCategoryRepository.findById(id).orElseThrow(
+                ()-> new EntityNotFoundException("Post Category not Found: "+id));
     }
 
     public PostCategory deleteById(int id) {

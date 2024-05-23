@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.form.CreateCategoryForm;
 import com.example.demo.form.UpdateCategoryForm;
 import com.example.demo.models.PostCategory;
@@ -33,37 +34,22 @@ public class CategoryController {
     @GetMapping("/{id}")
     private Object getById(@PathVariable(value = "id") Integer id) {
         PostCategory postCategory = postCategoryService.findById(id);
-        if (null == postCategory)
-            throw new UserNotFoundException("id-" + id);
-
-        EntityModel<PostCategory> entityModel = EntityModel.of(postCategory);
-        Link link = WebMvcLinkBuilder.linkTo(
-                methodOn(this.getClass()).finAllPostCategory()).withRel("all-users");
-        entityModel.add(link);
-        return entityModel;
+        return postCategory;
     }
 
     @PostMapping()
     private Object createCategory(@Valid @RequestBody CreateCategoryForm createCategoryForm){
         PostCategory postCategory = new PostCategory();
-        postCategory.setId(createCategoryForm.getId());
-        postCategory.setFirstName(createCategoryForm.getFirstName());
-        postCategory.setLastName(createCategoryForm.getLastName());
-//        user.setNow(createForm.getNow());
+        postCategory.setName(createCategoryForm.getName());
         postCategoryService.savePostCategory(postCategory);
 
-        URI location = ServletUriComponentsBuilder
-                .fromCurrentRequest().path("/{id}")
-                .buildAndExpand(createCategoryForm.getId()).toUri();
-
-        return ResponseEntity.created(location).build();
+        return postCategory;
     }
 
     @PutMapping("/{id}")
     private Object updateCategory(@Valid @RequestBody UpdateCategoryForm updateCategoryForm){
         PostCategory postCategory = postCategoryService.findById(updateCategoryForm.getId());
-        postCategory.setFirstName(updateCategoryForm.getFirstName());
-        postCategory.setLastName(updateCategoryForm.getLastName());
+        postCategory.setName(updateCategoryForm.getName());
         return postCategoryService.savePostCategory(postCategory);
     }
 
@@ -71,7 +57,5 @@ public class CategoryController {
     private void deleteById(@PathVariable(value = "id") Integer id) {
         PostCategory postCategory = postCategoryService.deleteById(id);
         //return "Delete ok!";
-        if (null == postCategory)
-            throw new UserNotFoundException("id-" + id);
     }
 }
