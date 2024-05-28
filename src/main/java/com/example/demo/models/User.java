@@ -1,5 +1,6 @@
 package com.example.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -33,6 +34,7 @@ public class User {
     @Column(name = "username", length = 30, nullable = false, unique = true)
     private String username;
 
+    @JsonIgnore
     @NotNull
     @Column(name = "password", nullable = false)
     private String password;
@@ -48,4 +50,8 @@ public class User {
     @CreatedDate
     @Column(name = "created_date")
     private Instant createdDate;
+
+    @Column(name = "is_active", columnDefinition = "tinyint(1) default 0", nullable = false)
+    private boolean isActive = false;
+
 }

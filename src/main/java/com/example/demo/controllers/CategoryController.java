@@ -1,23 +1,14 @@
 package com.example.demo.controllers;
 
-import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.form.CreateCategoryForm;
 import com.example.demo.form.UpdateCategoryForm;
 import com.example.demo.models.PostCategory;
 import com.example.demo.services.PostCategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
-
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/post-category")

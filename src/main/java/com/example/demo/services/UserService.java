@@ -40,4 +40,8 @@ public class UserService {
         }
         return null;
     }
+
+    public boolean existsByPhone(String phone) {
+        return userRepository.existsByPhone(phone);
+    }
 }
