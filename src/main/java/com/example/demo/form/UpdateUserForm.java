@@ -16,5 +16,4 @@ public class UpdateUserForm {
 
     private String lastName;
 
-    Instant now = Instant.now();
 }

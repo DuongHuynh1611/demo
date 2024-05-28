@@ -35,7 +35,6 @@ public class UserController {
         user.setUsername(createForm.getUsername());
         user.setFirstName(createForm.getFirstName());
         user.setLastName(createForm.getLastName());
-//        user.setNow(createForm.getNow());
         userService.saveUser(user);
 
         URI location = ServletUriComponentsBuilder
@@ -50,7 +49,6 @@ public class UserController {
         User user = userService.findById(updateForm.getId());
         user.setFirstName(updateForm.getFirstName());
         user.setLastName(updateForm.getLastName());
-//        user.setNow(updateForm.getNow());
         return userService.saveUser(user);
     }
 

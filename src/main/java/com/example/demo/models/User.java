@@ -6,10 +6,11 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.Instant;
 
-
+@EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "\"user\"")
 @Setter
@@ -45,6 +46,6 @@ public class User {
     private String phone;
 
     @CreatedDate
-//    @Column(name = "created_date")
-    Instant now = Instant.now();
+    @Column(name = "created_date")
+    private Instant createdDate;
 }

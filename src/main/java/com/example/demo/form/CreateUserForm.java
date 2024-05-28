@@ -30,5 +30,4 @@ public class CreateUserForm {
 
     private String lastName;
 
-    Instant now = Instant.now();
 }
