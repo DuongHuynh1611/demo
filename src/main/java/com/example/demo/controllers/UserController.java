@@ -30,6 +30,11 @@ public class UserController extends BaseController {
         if(userService.existsByPhone(createForm.getPhone())) {
             throw new BadRequestException("SDT da ton tai");
         }
+        else if (userService.existsByEmail(createForm.getEmail())){
+            throw new BadRequestException("Email da ton tai");
+        }else if (userService.existsByUserName(createForm.getUsername())){
+            throw new BadRequestException("Username da ton tai");
+        }
         User user = new User();
         user.setId(createForm.getId());
         user.setEmail(createForm.getEmail());
