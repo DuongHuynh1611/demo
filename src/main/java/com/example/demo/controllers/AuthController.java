@@ -137,8 +137,11 @@ public class AuthController extends BaseController {
     }
 
     @PutMapping("/update-role")
-    public void updateRolesForUsers(@RequestBody UpdateRoleForm updateRoleForm) {
+    public void updateRolesForUsers(@Valid @RequestBody UpdateRoleForm updateRoleForm) {
         userService.updateRolesForUsers(updateRoleForm.getId(), updateRoleForm.getNewRoles());
     }
-    
+    @DeleteMapping("/delete-role")
+    public void deleteRolesFromUsers(@Valid @RequestBody DeleteRoleForm deleteRoleForm) {
+        userService.deleteRolesFromUsers(deleteRoleForm.getId(), deleteRoleForm.getRole());
+    }
 }

@@ -59,7 +59,6 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
-    @Transactional
     public void addRoleToUsers(List<Integer> id, String roles) {
         Optional<Role> roleOpt = roleRepository.findByName(ERole.valueOf(roles));
         if (!roleOpt.isPresent()) {
@@ -74,7 +73,6 @@ public class UserService {
         userRepository.saveAll(users);
     }
 
-    @Transactional
     public void updateRolesForUsers(List<Integer> id, String newRoles) {
         Optional<Role> roleOpt = roleRepository.findByName(ERole.valueOf(newRoles));
         if (!roleOpt.isPresent()) {
@@ -92,6 +90,26 @@ public class UserService {
             Set<Role> roles = new HashSet<>();
             roles.add(newRole);
             user.setRoles(roles);
+        }
+
+        userRepository.saveAll(users);
+    }
+
+    public void deleteRolesFromUsers(List<Integer> id, String roles) {
+        Optional<Role> roleOpt = roleRepository.findByName(ERole.valueOf(roles));
+        if (!roleOpt.isPresent()) {
+            throw new BadRequestException("Role not found");
+        }
+        Role role = roleOpt.get();
+
+        List<User> users = userRepository.findAllById(id);
+
+        if (users.size() != id.size()) {
+            throw new BadRequestException("Some users not found");
+        }
+
+        for (User user : users) {
+            user.getRoles().remove(role);
         }
 
         userRepository.saveAll(users);
