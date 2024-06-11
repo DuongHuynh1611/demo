@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -88,60 +87,4 @@ public class AuthController extends BaseController {
         return makeResponse(true,user,"User registered successfully!");
     }
 
-    @PostMapping("/user-roles")
-    public ApiMessageDto<Object> createdRole (@Valid @RequestBody CreateRoleForm createRoleForm) {
-        if (userRepository.existsByUsername(createRoleForm.getUsername())) {
-            throw new BadRequestException("Username da ton tai");
-        }
-
-        if (userRepository.existsByEmail(createRoleForm.getEmail())) {
-            throw new BadRequestException("Email da ton tai");
-        }
-        User user = new User();
-        user.setUsername(createRoleForm.getUsername());
-        user.setEmail(createRoleForm.getEmail());
-        user.setPhone(createRoleForm.getPhone());
-        user.setFirstName(createRoleForm.getFirstName());
-        user.setLastName(createRoleForm.getLastName());
-        user.setPassword(passwordEncoder.encode(createRoleForm.getPassword()));
-
-        Set<String> strRoles = createRoleForm.getRole();
-        Set<Role> roles = new HashSet<>();
-
-        if (strRoles == null) {
-            Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                    .orElseThrow(() -> new BadRequestException("Error: Role is not found."));
-            roles.add(userRole);
-        } else
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin":
-                        Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                                .orElseThrow(() -> new BadRequestException("Error: Role is not found."));
-                        roles.add(adminRole);
-                        break;
-                    default:
-                        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
-                                .orElseThrow(() -> new BadRequestException("Error: Role is not found."));
-                        roles.add(userRole);
-                }
-            });
-        user.setRoles(roles);
-        userRepository.save(user);
-        return makeResponse(true,user,"Role has been created successfully!");
-    }
-
-    @PostMapping("/add-role")
-    public void addRoleToUsers(@Valid @RequestBody AddRoleForm addRoleForm) {
-        userService.addRoleToUsers(addRoleForm.getId(), addRoleForm.getRole());
-    }
-
-    @PutMapping("/update-role")
-    public void updateRolesForUsers(@Valid @RequestBody UpdateRoleForm updateRoleForm) {
-        userService.updateRolesForUsers(updateRoleForm.getId(), updateRoleForm.getNewRoles());
-    }
-    @DeleteMapping("/delete-role")
-    public void deleteRolesFromUsers(@Valid @RequestBody DeleteRoleForm deleteRoleForm) {
-        userService.deleteRolesFromUsers(deleteRoleForm.getId(), deleteRoleForm.getRole());
-    }
 }

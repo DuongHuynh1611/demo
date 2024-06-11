@@ -1,5 +1,6 @@
 package com.example.demo.form;
 
+import com.example.demo.models.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
@@ -25,5 +26,5 @@ public class CreateRoleForm {
 
     private String lastName;
 
-    private Set<String> role;
+    private Set<Long> roleIds;
 }
