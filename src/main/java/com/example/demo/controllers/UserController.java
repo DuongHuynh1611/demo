@@ -69,6 +69,5 @@ public class UserController extends BaseController {
     @DeleteMapping("/{id}")
     private void deleteById(@PathVariable(value = "id") Integer id) {
        User user = userService.deleteById(id);
-
     }
 ;}

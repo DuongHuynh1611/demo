@@ -1,29 +1,11 @@
 package com.example.demo.form;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.util.Set;
+import java.util.List;
 
 @Data
 public class AddRoleForm {
-    private Integer id;
-    @NotBlank
-    private String username;
-    @NotBlank
-    private String phone;
-    @NotBlank
-    @Email
-    private String email;
-
-    @NotBlank
-    private String firstName;
-
-    @NotBlank
-    private String password;
-
-    private String lastName;
-
-    private Set<String> role;
+    private List<Integer> id;
+    private String role;
 }

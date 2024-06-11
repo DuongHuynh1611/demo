@@ -5,7 +5,8 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class UpdateRoleForm {
-    private List<Integer> userIds;
-    private String roleName;
+public class UpdateRoleForm{
+    private List<Integer> id;
+    private String newRoles;
+
 }

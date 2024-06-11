@@ -3,10 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.dto.ApiMessageDto;
 import com.example.demo.dto.TokenAuthDto;
 import com.example.demo.exceptions.BadRequestException;
-import com.example.demo.form.UpdateRoleForm;
-import com.example.demo.form.AddRoleForm;
-import com.example.demo.form.LoginForm;
-import com.example.demo.form.SignupForm;
+import com.example.demo.form.*;
 import com.example.demo.models.ERole;
 import com.example.demo.models.Role;
 import com.example.demo.models.User;
@@ -91,24 +88,24 @@ public class AuthController extends BaseController {
         return makeResponse(true,user,"User registered successfully!");
     }
 
-    @PostMapping("/add-role")
-    public ApiMessageDto<Object> createdRole (@Valid @RequestBody AddRoleForm addRoleForm) {
-        if (userRepository.existsByUsername(addRoleForm.getUsername())) {
+    @PostMapping("/user-roles")
+    public ApiMessageDto<Object> createdRole (@Valid @RequestBody CreateRoleForm createRoleForm) {
+        if (userRepository.existsByUsername(createRoleForm.getUsername())) {
             throw new BadRequestException("Username da ton tai");
         }
 
-        if (userRepository.existsByEmail(addRoleForm.getEmail())) {
+        if (userRepository.existsByEmail(createRoleForm.getEmail())) {
             throw new BadRequestException("Email da ton tai");
         }
         User user = new User();
-        user.setUsername(addRoleForm.getUsername());
-        user.setEmail(addRoleForm.getEmail());
-        user.setPhone(addRoleForm.getPhone());
-        user.setFirstName(addRoleForm.getFirstName());
-        user.setLastName(addRoleForm.getLastName());
-        user.setPassword(passwordEncoder.encode(addRoleForm.getPassword()));
+        user.setUsername(createRoleForm.getUsername());
+        user.setEmail(createRoleForm.getEmail());
+        user.setPhone(createRoleForm.getPhone());
+        user.setFirstName(createRoleForm.getFirstName());
+        user.setLastName(createRoleForm.getLastName());
+        user.setPassword(passwordEncoder.encode(createRoleForm.getPassword()));
 
-        Set<String> strRoles = addRoleForm.getRole();
+        Set<String> strRoles = createRoleForm.getRole();
         Set<Role> roles = new HashSet<>();
 
         if (strRoles == null) {
@@ -134,10 +131,14 @@ public class AuthController extends BaseController {
         return makeResponse(true,user,"Role has been created successfully!");
     }
 
+    @PostMapping("/add-role")
+    public void addRoleToUsers(@Valid @RequestBody AddRoleForm addRoleForm) {
+        userService.addRoleToUsers(addRoleForm.getId(), addRoleForm.getRole());
+    }
+
     @PutMapping("/update-role")
-    public ResponseEntity<?> updateRoleToUsers(@Valid @RequestBody UpdateRoleForm updateRoleForm) {
-        userService.updateRoleToUsers(updateRoleForm.getUserIds(), updateRoleForm.getRoleName());
-        return ResponseEntity.ok().build();
+    public void updateRolesForUsers(@RequestBody UpdateRoleForm updateRoleForm) {
+        userService.updateRolesForUsers(updateRoleForm.getId(), updateRoleForm.getNewRoles());
     }
     
 }
